@@ -2,6 +2,7 @@ package ohm.softa.a08.controller;
 
 import com.google.gson.Gson;
 import ohm.softa.a08.api.OpenMensaAPI;
+import ohm.softa.a08.filtering.MealFilterFactory;
 import ohm.softa.a08.model.Meal;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -100,6 +101,10 @@ public class MainController implements Initializable {
 	 */
 	@FXML
 	public void doGetMeals() {
+
+		var currentFilterName = filterChoiceBox.getSelectionModel().getSelectedItem();
+		logger.debug(String.format("Selected filter is: %s", currentFilterName));
+		var filter = MealFilterFactory.getStrategy(currentFilterName);
 		api.getMeals(openMensaDateFormat.format(new Date())).enqueue(new Callback<>() {
 			@Override
 			public void onResponse(Call<List<Meal>> call, Response<List<Meal>> response) {
@@ -109,22 +114,16 @@ public class MainController implements Initializable {
 					if (!response.isSuccessful() || response.body() == null) {
 						logger.error(String.format("Got response with not successfull code %d", response.code()));
 
-							var alert = new Alert(Alert.AlertType.ERROR);
-							alert.setHeaderText("Unsuccessful HTTP call");
-							alert.setContentText("Failed to get meals from OpenMensaAPI");
-							alert.show();
+						var alert = new Alert(Alert.AlertType.ERROR);
+						alert.setHeaderText("Unsuccessful HTTP call");
+						alert.setContentText("Failed to get meals from OpenMensaAPI");
+						alert.show();
 
 						return;
 					}
 
 					meals.clear();
-
-					if ("Vegetarian".equals(filterChoiceBox.getValue()))
-						meals.addAll(response.body().stream()
-							.filter(Meal::isVegetarian)
-							.collect(Collectors.toList()));
-					else
-						meals.addAll(response.body());
+					meals.addAll(filter.filter(response.body()));
 				});
 			}
 

@@ -2,7 +2,7 @@ package ohm.softa.a08.filtering;
 
 import java.util.*;
 
-public class MealsFilterFactory {
+public class MealFilterFactory {
 	private static final Map<String, MealsFilter> filters = new HashMap<String, MealsFilter>();
 
 	static {
