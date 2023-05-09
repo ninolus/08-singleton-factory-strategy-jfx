@@ -3,6 +3,7 @@ package ohm.softa.a08.filtering;
 import ohm.softa.a08.model.Meal;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class NotesFilter extends FilterBase {
 
@@ -19,8 +20,9 @@ public class NotesFilter extends FilterBase {
 	@Override
 	protected boolean include(Meal m) {
 		if (include) {
-			return notes.stream().anyMatch(e -> m.getNotes().contains(e));
+			return notes.stream().map(String::toLowerCase).anyMatch(note -> m.getNotes().stream().map(String::toLowerCase).collect(Collectors.toList()).contains(note));
+
 		}
-		return notes.stream().noneMatch(e -> m.getNotes().contains(e));
+		return notes.stream().map(String::toLowerCase).noneMatch(note -> m.getNotes().stream().map(String::toLowerCase).collect(Collectors.toList()).contains(note));
 	}
 }
