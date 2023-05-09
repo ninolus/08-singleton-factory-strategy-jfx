@@ -13,6 +13,9 @@ public class MealFilterFactory {
 	}
 
 	public static MealsFilter getStrategy(String key) {
-		return filters.getOrDefault(key, filters.get("all"));
+		if (key == null) {
+			key = "all";
+		}
+		return filters.getOrDefault(key.toLowerCase(), filters.get("all"));
 	}
 }

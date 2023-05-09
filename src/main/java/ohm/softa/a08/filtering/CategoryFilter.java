@@ -16,6 +16,7 @@ public class CategoryFilter extends FilterBase {
 
 	@Override
 	protected boolean include(Meal m) {
+		// todo: der filter funktioniert ggf. nicht, wenn die Kategorie "Schwein Fisch" ist!
 		if (include) {
 			return categories.stream().anyMatch(e -> e.equalsIgnoreCase(m.getCategory()));
 		}

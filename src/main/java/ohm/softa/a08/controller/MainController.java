@@ -101,10 +101,10 @@ public class MainController implements Initializable {
 	 */
 	@FXML
 	public void doGetMeals() {
-
 		var currentFilterName = filterChoiceBox.getSelectionModel().getSelectedItem();
 		logger.debug(String.format("Selected filter is: %s", currentFilterName));
 		var filter = MealFilterFactory.getStrategy(currentFilterName);
+
 		api.getMeals(openMensaDateFormat.format(new Date())).enqueue(new Callback<>() {
 			@Override
 			public void onResponse(Call<List<Meal>> call, Response<List<Meal>> response) {
