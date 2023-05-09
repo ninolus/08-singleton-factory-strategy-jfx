@@ -13,6 +13,6 @@ public class MealsFilterFactory {
 	}
 
 	public static MealsFilter getStrategy(String key) {
-		return filters.getOrDefault(key, new NoFilter());
+		return filters.getOrDefault(key, filters.get("all"));
 	}
 }
